@@ -26,9 +26,12 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
-    public String login(@RequestBody User user)
+    public ResponseEntity<String> login(@RequestBody User user)
     {
-        return service.verify(user);
+        String token = service.verify(user);
+        return token == null
+                ? new ResponseEntity<String>("You are not authorised", HttpStatus.FORBIDDEN)
+                : new ResponseEntity<String>(token, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/delete-account")

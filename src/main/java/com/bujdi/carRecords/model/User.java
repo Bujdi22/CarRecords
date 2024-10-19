@@ -3,12 +3,14 @@ package com.bujdi.carRecords.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
 @Entity
+@ToString
 @Table(name = "app_user")
 public class User {
     @Id

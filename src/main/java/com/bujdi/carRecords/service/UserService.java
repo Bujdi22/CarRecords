@@ -36,11 +36,12 @@ public class UserService {
 
 
     public String verify(User user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        if (authentication.isAuthenticated()) {
+        try {
+            Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
             return jwtService.generateToken(user.getUsername());
-        } else {
-            return "fail";
+        } catch (Exception e) {
+            System.out.println("Exception caught in verify");
+            return null;
         }
     }
 

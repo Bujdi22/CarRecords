@@ -1,0 +1,23 @@
+package com.bujdi.carRecords.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
+@Entity
+@Table(name = "app_user")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String username;
+    private String password;
+    private String role = "ROLE_USER";
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+}

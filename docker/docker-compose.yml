@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - POSTGRES_DB=spring
+    networks:
+        - spring-network
+
+  adminer_container:
+    image: adminer:latest
+    depends_on:
+      - postgres
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    restart: unless-stopped
+    ports:
+      - 8090:8080
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+    driver: bridge

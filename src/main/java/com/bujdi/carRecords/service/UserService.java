@@ -41,7 +41,9 @@ public class UserService {
             return jwtService.generateToken(user.getUsername());
         } catch (Exception e) {
             System.out.println("Exception caught in verify");
-            return null;
+            System.out.println(e);
+            throw e;
+//            return null;
         }
     }
 

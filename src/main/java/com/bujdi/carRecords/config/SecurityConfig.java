@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +35,13 @@ public class SecurityConfig {
                 authorizeHttpRequests(request -> request
                         .requestMatchers("/api/login", "/api/register").permitAll()
                         .anyRequest().authenticated()).
-                httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })) // Custom handler for unauthorized responses
                 .build();
-
 
     }
 

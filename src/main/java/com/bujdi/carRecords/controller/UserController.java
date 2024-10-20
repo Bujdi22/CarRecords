@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -30,8 +27,14 @@ public class UserController {
     {
         String token = service.verify(user);
         return token == null
-                ? new ResponseEntity<String>("You are not authorised", HttpStatus.FORBIDDEN)
-                : new ResponseEntity<String>(token, HttpStatus.OK);
+                ? new ResponseEntity<>("You are not authorised", HttpStatus.FORBIDDEN)
+                : new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/fetch-account")
+    public ResponseEntity<User> fetchAccount()
+    {
+        return new ResponseEntity<>(service.getAuthUser(), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/delete-account")

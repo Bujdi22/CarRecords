@@ -25,6 +25,16 @@ services:
     networks:
       - spring-network
 
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - spring-network
+
 networks:
   spring-network:
     driver: bridge

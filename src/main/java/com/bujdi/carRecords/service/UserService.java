@@ -26,11 +26,19 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private EmailService emailService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public void register(UserDto dto) {
         User user = createUserFromDto(dto);
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
+        emailService.sendEmail(user,
+                "Welcome to Car Records",
+                "<p>We hope you enjoy our application and welcome to the team!</p>"
+        );
         repo.save(user);
     }
 
@@ -38,13 +46,19 @@ public class UserService {
     public String verify(User user) {
         try {
             Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return jwtService.generateToken(user.getUsername());
+            User loggedInUser = repo.findByUsername(user.getUsername());
+            loggedInUser.setLastLogin(LocalDateTime.now());
+            repo.save(loggedInUser);
+            return this.generateTokenForUser(user);
         } catch (Exception e) {
             System.out.println("Exception caught in verify");
             System.out.println(e);
             throw e;
-//            return null;
         }
+    }
+
+    public String generateTokenForUser(User user) {
+        return jwtService.generateToken(user.getUsername());
     }
 
     public User getAuthUser() {
@@ -55,6 +69,7 @@ public class UserService {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
+        user.setDisplayName(dto.getDisplayName());
 
         return user;
     }

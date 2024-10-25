@@ -1,6 +1,7 @@
 package com.bujdi.carRecords.controller;
 
 import com.bujdi.carRecords.dto.UserDto;
+import com.bujdi.carRecords.mapping.UserAccountMapping;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.service.UserService;
 import jakarta.validation.Valid;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -32,9 +35,12 @@ public class UserController {
     }
 
     @GetMapping("/api/fetch-account")
-    public ResponseEntity<User> fetchAccount()
+    public ResponseEntity<Map<String, Object>> fetchAccount()
     {
-        return new ResponseEntity<>(service.getAuthUser(), HttpStatus.OK);
+        User user = service.getAuthUser();
+        Map<String, Object> response = UserAccountMapping.mapUserToResponse(user);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/delete-account")
@@ -43,5 +49,14 @@ public class UserController {
         service.deleteUser(user);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/api/refresh-token")
+    public ResponseEntity<String> refreshToken()
+    {
+        User user = service.getAuthUser();
+        String token = service.generateTokenForUser(user);
+
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 }

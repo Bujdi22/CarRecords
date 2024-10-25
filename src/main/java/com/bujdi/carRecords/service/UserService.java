@@ -26,12 +26,20 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private EmailService emailService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public void register(UserDto dto) {
         User user = createUserFromDto(dto);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
+        emailService.sendEmail(user.getUsername(),
+                "Welcome to Car Records",
+                "<p>Hi, " + user.getDisplayName() + "</p>" +
+                        "<p>Welcome to the Car Records app!</p>"
+        );
         repo.save(user);
     }
 

@@ -18,8 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
+    private String displayName;
     private String password;
     private String role = "ROLE_USER";
+    private LocalDateTime createdAt;
+    private LocalDateTime lastLogin;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

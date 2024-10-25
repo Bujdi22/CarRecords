@@ -31,11 +31,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http.csrf(customizer -> customizer.disable()).
-                authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/login", "/api/register").permitAll()
-                        .anyRequest().authenticated()).
-                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        return http.csrf(customizer -> customizer.disable())
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(request -> request
+                .requestMatchers("/api/login", "/api/register").permitAll()
+                .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint((request, response, authException) -> {

@@ -35,10 +35,9 @@ public class UserService {
         User user = createUserFromDto(dto);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        emailService.sendEmail(user.getUsername(),
+        emailService.sendEmail(user,
                 "Welcome to Car Records",
-                "<p>Hi, " + user.getDisplayName() + "</p>" +
-                        "<p>Welcome to the Car Records app!</p>"
+                "<p>We hope you enjoy our application and welcome to the team!</p>"
         );
         repo.save(user);
     }

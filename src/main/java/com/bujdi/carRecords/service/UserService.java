@@ -9,6 +9,7 @@ import com.bujdi.carRecords.repository.SecureTokenRepository;
 import com.bujdi.carRecords.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,10 +57,8 @@ public class UserService {
             loggedInUser.setLastLogin(LocalDateTime.now());
             repo.save(loggedInUser);
             return this.generateTokenForUser(user);
-        } catch (Exception e) {
-            System.out.println("Exception caught in verify");
-            System.out.println(e);
-            throw e;
+        } catch (BadCredentialsException e) {
+            return null;
         }
     }
 
@@ -109,22 +108,24 @@ public class UserService {
         repo.save(user);
     }
 
-    public void resetPassword(String password, String token) {
+    public boolean resetPassword(String password, String token) {
         SecureToken secureToken = tokenRepo.findToken(token);
 
         if (secureToken == null) {
-            return;
+            return false;
         }
         if (!secureToken.getPurpose().equals("forgot-password")) {
-            return;
+            return false;
         }
         if (secureToken.isExpired()) {
-            return;
+            return false;
         }
 
         User user = secureToken.getUser();
         user.setPassword(encoder.encode(password));
         repo.save(user);
         tokenRepo.delete(secureToken);
+
+        return true;
     }
 }

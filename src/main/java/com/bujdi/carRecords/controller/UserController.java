@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -32,7 +33,7 @@ public class UserController {
     {
         String token = service.verify(user);
         return token == null
-                ? new ResponseEntity<>("You are not authorised", HttpStatus.FORBIDDEN)
+                ? new ResponseEntity<>("Bad credentials", HttpStatus.FORBIDDEN)
                 : new ResponseEntity<>(token, HttpStatus.OK);
     }
 
@@ -71,11 +72,21 @@ public class UserController {
     }
 
     @PostMapping("/api/forgot-password")
-    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto dto)
+    public ResponseEntity<Map<String, Map<String, String>>> resetPassword(@Valid @RequestBody ResetPasswordDto dto)
     {
-        this.service.resetPassword(dto.getPassword(), dto.getToken());
+        boolean success = this.service.resetPassword(dto.getPassword(), dto.getToken());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (success) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("Rejected", "Your reset link might have expired.");
+
+            Map<String, Map<String, String>> response = new HashMap<>();
+            response.put("errors", errors);
+
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
 

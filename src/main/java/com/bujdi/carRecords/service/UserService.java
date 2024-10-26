@@ -87,6 +87,7 @@ public class UserService {
                     "Forgot password",
                     "<p>You requested a password reset.</p>" +
                             "<p>Please click the link below to reset your password.</p>" +
+                            "<p>This link will only work for 30 minutes</p>" +
                             "<p>If this was not done by you, you can ignore this email.</p>" +
                             "<p><a href='"+ resetUrl +"'>Click here to reset your password</a></p>"
             );
@@ -111,7 +112,6 @@ public class UserService {
     public void resetPassword(String password, String token) {
         SecureToken secureToken = tokenRepo.findToken(token);
 
-        System.out.println(secureToken);
         if (secureToken == null) {
             return;
         }

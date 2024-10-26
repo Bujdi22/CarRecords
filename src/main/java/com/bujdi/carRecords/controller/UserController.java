@@ -1,5 +1,7 @@
 package com.bujdi.carRecords.controller;
 
+import com.bujdi.carRecords.dto.ForgotPasswordDto;
+import com.bujdi.carRecords.dto.ResetPasswordDto;
 import com.bujdi.carRecords.dto.UserDto;
 import com.bujdi.carRecords.mapping.UserAccountMapping;
 import com.bujdi.carRecords.model.User;
@@ -59,4 +61,22 @@ public class UserController {
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
+
+    @PostMapping("/api/forgot-password-request")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordDto dto)
+    {
+        this.service.sendForgotPassword(dto.getUsername());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/api/forgot-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto dto)
+    {
+        this.service.resetPassword(dto.getPassword(), dto.getToken());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

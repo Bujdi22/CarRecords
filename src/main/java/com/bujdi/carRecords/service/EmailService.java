@@ -1,6 +1,6 @@
 package com.bujdi.carRecords.service;
 
-import com.bujdi.carRecords.emails.EmailSender;
+import com.bujdi.carRecords.helper.EmailSender;
 import com.bujdi.carRecords.model.User;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

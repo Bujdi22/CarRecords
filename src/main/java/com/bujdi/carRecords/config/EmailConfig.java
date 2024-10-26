@@ -1,6 +1,6 @@
 package com.bujdi.carRecords.config;
 
-import com.bujdi.carRecords.emails.EmailSender;
+import com.bujdi.carRecords.helper.EmailSender;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -133,11 +133,13 @@
         .pc-project-container {width: 100% !important;}
         .pc-sm-hide {display: none !important;}
         .pc-sm-bg-img-hide {background-image: none !important;}
-        .pc-w620-padding-25-35-0-35 {padding: 25px 35px 0px 35px !important;}
+        .pc-w620-itemsSpacings-0-10 {padding-left: 0px !important;padding-right: 0px !important;padding-top: 5px !important;padding-bottom: 5px !important;}
+        .pc-w620-padding-25-30-15-30 {padding: 25px 30px 15px 30px !important;}
+        table.pc-w620-spacing-0-0-0-0 {margin: 0px 0px 0px 0px !important;}
+        td.pc-w620-spacing-0-0-0-0,th.pc-w620-spacing-0-0-0-0{margin: 0 !important;padding: 0px 0px 0px 0px !important;}
         .pc-w620-padding-15-35-0-35 {padding: 15px 35px 0px 35px !important;}
         .pc-w620-padding-10-30-10-30 {padding: 10px 30px 10px 30px !important;}
         .pc-w620-padding-10-35-10-35 {padding: 10px 35px 10px 35px !important;}
-        .pc-w620-itemsSpacings-0-10 {padding-left: 0px !important;padding-right: 0px !important;padding-top: 5px !important;padding-bottom: 5px !important;}
         .pc-w620-valign-top {vertical-align: top !important;}
         td.pc-w620-halign-center,th.pc-w620-halign-center {text-align: center !important;}
         table.pc-w620-halign-center {float: none !important;margin-right: auto !important;margin-left: auto !important;}
@@ -166,7 +168,6 @@
         .pc-w620-tableCollapsed-1.pc-w620-width-fill > tbody > tr > td,.pc-w620-tableCollapsed-1.pc-w620-width-fill > tr > td {width: 100% !important;box-sizing: border-box !important;}
         }
         @media (max-width: 520px) {
-        .pc-w520-padding-25-30-0-30 {padding: 25px 30px 0px 30px !important;}
         .pc-w520-padding-15-30-0-30 {padding: 15px 30px 0px 30px !important;}
         .pc-w520-padding-10-25-10-25 {padding: 10px 25px 10px 25px !important;}
         .pc-w520-padding-10-30-10-30 {padding: 10px 30px 10px 30px !important;}
@@ -208,17 +209,62 @@
                                     <!-- BEGIN MODULE: Title -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                         <tr>
-                                            <td style="padding: 0px 0px 0px 0px;">
+                                            <td class="pc-w620-spacing-0-0-0-0" style="padding: 0px 0px 0px 0px;">
                                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation" style="border-collapse: separate; border-spacing: 0px;">
                                                     <tr>
-                                                        <td valign="top" class="pc-w520-padding-25-30-0-30 pc-w620-padding-25-35-0-35" style="padding: 25px 40px 25px 40px; border-radius: 0px; background-color: #064B85;" bgcolor="#064B85">
-                                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="border-collapse: separate; border-spacing: 0; margin-right: auto; margin-left: auto;">
+                                                        <td valign="top" class="pc-w620-padding-25-30-15-30" style="padding: 25px 40px 25px 40px; border-radius: 0px; background-color: #064B85;" bgcolor="#064B85">
+                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
                                                                 <tr>
-                                                                    <td valign="top" align="left">
-                                                                        <div class="pc-font-alt" style="line-height: 42px; letter-spacing: -0.2px; font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 32px; font-weight: bold; font-variant-ligatures: normal; color: #ffffff; text-align: left; text-align-last: left;">
-                                                                            <div><span style="color: #ffffff;" th:text="${subject}">Subject </span>
-                                                                            </div>
-                                                                        </div>
+                                                                    <td>
+                                                                        <table class="pc-width-fill pc-w620-gridCollapsed-0" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                                            <tr class="pc-grid-tr-first pc-grid-tr-last">
+                                                                                <td class="pc-grid-td-first pc-w620-itemsSpacings-0-10" align="left" valign="top" style="width: 50%; padding-top: 0px; padding-right: 5px; padding-bottom: 0px; padding-left: 0px;">
+                                                                                    <table style="border-collapse: separate; border-spacing: 0; width: 100%;" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                                                        <tr>
+                                                                                            <td align="left" valign="top">
+                                                                                                <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
+                                                                                                    <tr>
+                                                                                                        <td align="left" valign="top">
+                                                                                                            <table border="0" cellpadding="0" cellspacing="0" role="presentation" align="left" style="border-collapse: separate; border-spacing: 0;">
+                                                                                                                <tr>
+                                                                                                                    <td valign="top" align="left">
+                                                                                                                        <div class="pc-font-alt" style="line-height: 36px; letter-spacing: -0.2px; font-family: 'Fira Sans', Arial, Helvetica, sans-serif; font-size: 26px; font-weight: bold; font-variant-ligatures: normal; color: #ffffff; text-align: left; text-align-last: left;">
+                                                                                                                            <div><span style="color: #ffffff;" th:text="${subject}">Subject </span>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                                <td class="pc-grid-td-last pc-w620-itemsSpacings-0-10" align="left" valign="top" style="width: 50%; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 5px;">
+                                                                                    <table style="border-collapse: separate; border-spacing: 0; width: 100%;" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                                                        <tr>
+                                                                                            <td align="left" valign="top">
+                                                                                                <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
+                                                                                                    <tr>
+                                                                                                        <td align="left" valign="top">
+                                                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+                                                                                                                <tr>
+                                                                                                                    <td align="right" valign="top">
+                                                                                                                        <img src="https://cloudfilesdm.com/postcards/image-1729931147282.png" width="167" height="40" alt="" style="display: block; outline: 0; line-height: 100%; -ms-interpolation-mode: bicubic; width: 167px; height: 40px; border: 0;" />
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </table>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -352,7 +398,7 @@
                                                                                                                             </div>
                                                                                                                             <div><span>&#xFEFF;</span>
                                                                                                                             </div>
-                                                                                                                            <div><span>Car Records App Team</span>
+                                                                                                                            <div><span>Auto Journal App Team</span>
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                     </td>

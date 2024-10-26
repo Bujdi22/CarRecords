@@ -1,4 +1,4 @@
-package com.bujdi.carRecords.emails;
+package com.bujdi.carRecords.helper;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -32,7 +32,7 @@ public class EmailSender {
         context.setVariables(templateModel);
         String htmlContent = templateEngine.process(templateName, context);
 
-        helper.setFrom("noreply@carrecords.com", "Car Records App");
+        helper.setFrom("noreply@autojournalapp.com", "Auto Journal App");
         helper.setTo(email);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);

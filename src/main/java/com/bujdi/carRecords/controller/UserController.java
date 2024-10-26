@@ -79,13 +79,9 @@ public class UserController {
         if (success) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            Map<String, String> errors = new HashMap<>();
-            errors.put("Rejected", "Your reset link might have expired.");
-
-            Map<String, Map<String, String>> response = new HashMap<>();
-            response.put("errors", errors);
-
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of(
+                    "errors", Map.of("Rejected", "Your reset link might have expired.")
+            ), HttpStatus.BAD_REQUEST);
         }
     }
 

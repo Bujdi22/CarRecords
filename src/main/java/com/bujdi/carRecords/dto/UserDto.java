@@ -21,6 +21,9 @@ public class UserDto {
         @Size(min = 3, max = 100, message = "The length of the display name must be between 3 and 100 characters.")
         private String displayName;
 
+        @NotEmpty(message = "The recaptcha token is required")
+        private String recaptchaToken;
+
         @ValidPassword
         private String password;
 }

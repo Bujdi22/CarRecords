@@ -5,6 +5,7 @@ import com.bujdi.carRecords.dto.ResetPasswordDto;
 import com.bujdi.carRecords.dto.UserDto;
 import com.bujdi.carRecords.mapping.UserAccountMapping;
 import com.bujdi.carRecords.model.User;
+import com.bujdi.carRecords.service.RecaptchaService;
 import com.bujdi.carRecords.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,16 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private RecaptchaService recaptchaService;
+
     @PostMapping("/api/register")
     public ResponseEntity<Object> register(@Valid @RequestBody UserDto dto)
     {
+        if (!recaptchaService.verifyRecaptcha(dto.getRecaptchaToken())) {
+            return new ResponseEntity<>("Bad recaptcha", HttpStatus.BAD_REQUEST);
+        }
+
         service.register(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

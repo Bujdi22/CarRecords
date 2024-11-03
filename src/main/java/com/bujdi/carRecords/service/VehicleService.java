@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -25,5 +26,9 @@ public class VehicleService {
         vehicle.setUser(user);
 
         return repo.save(vehicle);
+    }
+
+    public Optional<Vehicle> getVehicleById(int vehicleId) {
+        return repo.findById(vehicleId);
     }
 }

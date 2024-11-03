@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.dto;
 
+import com.bujdi.carRecords.model.Vehicle;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,4 +26,14 @@ public class VehicleDto {
     @Max(value = 2100, message = "The year cannot be after 2100")
     private int year;
 
+    public Vehicle toVehicle() {
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setDisplayName(this.getDisplayName());
+        vehicle.setMake(this.getMake());
+        vehicle.setModel(this.getModel());
+        vehicle.setYear(this.getYear());
+
+        return vehicle;
+    }
 }

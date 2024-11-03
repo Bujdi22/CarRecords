@@ -48,19 +48,40 @@ public class VehicleController {
     public ResponseEntity<Vehicle> addVehicle(@Valid @RequestBody VehicleDto vehicleDto)
     {
         User user = userService.getAuthUser();
-        Vehicle savedVehicle = service.addVehicle(this.createVehicleFromDTO(vehicleDto), user);
+        Vehicle savedVehicle = service.addVehicle(vehicleDto.toVehicle(), user);
 
         return new ResponseEntity<>(savedVehicle, HttpStatus.CREATED);
     }
 
-    private Vehicle createVehicleFromDTO(VehicleDto vehicleDto) {
-        Vehicle vehicle = new Vehicle();
+    @PutMapping("/vehicles/{vehicleId}")
+    public ResponseEntity<Object> updateVehicle(
+        @PathVariable("vehicleId") int vehicleId,
+        @Valid @RequestBody VehicleDto vehicleDto
+    ){
+        User user = userService.getAuthUser();
 
-        vehicle.setDisplayName(vehicleDto.getDisplayName());
-        vehicle.setMake(vehicleDto.getMake());
-        vehicle.setModel(vehicleDto.getModel());
-        vehicle.setYear(vehicleDto.getYear());
+        Optional<Vehicle> vehicle = service.getVehicleById(vehicleId);
 
-        return vehicle;
+        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(this.service.updateVehicle(vehicle.get(), vehicleDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/vehicles/{vehicleId}")
+    public ResponseEntity<Object> deleteVehicle(@PathVariable("vehicleId") int vehicleId) {
+
+        User user = userService.getAuthUser();
+
+        Optional<Vehicle> vehicle = service.getVehicleById(vehicleId);
+
+        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+        service.deleteVehicle(vehicle.get());
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

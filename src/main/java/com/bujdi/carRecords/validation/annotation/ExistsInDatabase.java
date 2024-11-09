@@ -20,4 +20,5 @@ public @interface ExistsInDatabase {
     // Specify the entity and field to check
     Class<?> entity();
     String field();
+    boolean belongsToUser() default false;
 }

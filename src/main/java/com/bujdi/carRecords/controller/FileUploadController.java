@@ -1,14 +1,18 @@
 package com.bujdi.carRecords.controller;
 
 import com.bujdi.carRecords.dto.APIResponse;
+import com.bujdi.carRecords.dto.FileUploadDto;
 import com.bujdi.carRecords.exception.FileDownloadException;
 import com.bujdi.carRecords.exception.FileEmptyException;
 import com.bujdi.carRecords.exception.FileUploadException;
 import com.bujdi.carRecords.service.FileService;
+import com.bujdi.carRecords.service.MediaService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,8 +39,22 @@ public class FileUploadController {
         this.fileService = fileService;
     }
 
+    @Autowired
+    private MediaService mediaService;
+
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws FileEmptyException, FileUploadException, IOException {
+    public ResponseEntity<?> uploadFile(@Valid @ModelAttribute FileUploadDto dto) throws FileEmptyException, FileUploadException, IOException {
+
+        if (!mediaService.validateAccess(dto.getModelType(), dto.getModelId())) {
+            APIResponse apiResponse = APIResponse.builder()
+                    .message("Invalid model")
+                    .isSuccessful(false)
+                    .statusCode(400)
+                    .build();
+            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        MultipartFile multipartFile = dto.getFile();
         if (multipartFile.isEmpty()){
             throw new FileEmptyException("File is empty. Cannot save an empty file");
         }
@@ -44,7 +62,7 @@ public class FileUploadController {
         List<String> allowedFileExtensions = new ArrayList<>(Arrays.asList("pdf", "png", "jpg", "jpeg"));
 
         if (isValidFile && allowedFileExtensions.contains(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))){
-            String fileName = fileService.uploadFile(multipartFile);
+            String fileName = mediaService.upload(dto);
             APIResponse apiResponse = APIResponse.builder()
                     .message("file uploaded successfully. File unique name =>" + fileName)
                     .isSuccessful(true)

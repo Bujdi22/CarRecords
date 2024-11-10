@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.model;
 
+import com.bujdi.carRecords.validation.AccessValidatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MaintenanceRecord {
+public class MaintenanceRecord implements AccessValidatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -64,5 +65,18 @@ public class MaintenanceRecord {
             System.out.println("Failed to deserialize JSON: " + ex.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public boolean hasUserAccess(int userId) {
+        if (vehicle == null) {
+            return false;
+        }
+        User user = vehicle.getUser();
+        if (user == null) {
+            return false;
+        }
+
+        return user.getId() == userId;
     }
 }

@@ -1,4 +1,5 @@
-# Spring starter project
+# Auto Journal Project
+![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=Spring&logoColor=white)
 
 ## environment variables
 Create a `env.properties` file in root, and fill in .env variables

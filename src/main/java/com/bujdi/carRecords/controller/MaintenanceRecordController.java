@@ -46,6 +46,19 @@ public class MaintenanceRecordController {
         return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
+    @GetMapping("/maintenance-records/single-record/{recordId}")
+    public ResponseEntity<Object> getSingleRecord(@PathVariable("recordId") int recordId) {
+        User user = userService.getAuthUser();
+
+        Optional<MaintenanceRecord> record = recordService.getRecordById(recordId);
+
+        if (record.isEmpty() || record.get().getVehicle().getUser().getId() != user.getId()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(record.get(), HttpStatus.OK);
+    }
+
     @PostMapping("/maintenance-records")
     public ResponseEntity<MaintenanceRecord> addRecord(@Valid @RequestBody MaintenanceRecordDto dto) {
         return new ResponseEntity<>(recordService.addRecord(dto), HttpStatus.OK);

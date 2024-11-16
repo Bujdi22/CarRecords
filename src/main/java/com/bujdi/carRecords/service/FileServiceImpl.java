@@ -12,10 +12,8 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -82,13 +80,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean delete(String fileName) {
-        File file = Paths.get(fileName).toFile();
-        if (file.exists()) {
-            file.delete();
-            return true;
-        }
-        return false;
+    public void delete(String fileName) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
     }
 
     private boolean bucketIsEmpty() {

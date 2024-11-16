@@ -12,5 +12,5 @@ public interface FileService {
 
     InputStream downloadFile(String fileName) throws FileDownloadException, IOException;
 
-    boolean delete(String fileName);
+    void delete(String fileName);
 }

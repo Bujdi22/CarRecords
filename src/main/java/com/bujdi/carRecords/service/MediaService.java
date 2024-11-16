@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,6 +67,7 @@ public class MediaService {
         media.setFileType(fileType);
         media.setModelType(dto.getModelType());
         media.setModelId(dto.getModelId());
+        media.setCreatedAt(LocalDateTime.now());
         mediaRepository.save(media);
 
         return fileName;
@@ -90,5 +92,10 @@ public class MediaService {
             return "maintenance_record";
         }
         throw new IllegalArgumentException("Invalid class type for getTypeStringFromClass");
+    }
+
+    public void deleteMedia(Media media) {
+        fileService.delete(media.getStoredPath());
+        mediaRepository.delete(media);
     }
 }

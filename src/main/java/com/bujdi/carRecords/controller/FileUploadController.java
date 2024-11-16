@@ -111,22 +111,6 @@ public class FileUploadController {
         }
     }
 
-
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> delete(@RequestParam("fileName") @NotBlank @NotNull String fileName){
-        boolean isDeleted = fileService.delete(fileName);
-        if (isDeleted){
-            APIResponse apiResponse = APIResponse.builder().message("file deleted!")
-                    .statusCode(200).build();
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } else {
-            APIResponse apiResponse = APIResponse.builder().message("file does not exist")
-                    .statusCode(404).build();
-            return new ResponseEntity<>("file does not exist", HttpStatus.NOT_FOUND);
-        }
-    }
-
     private boolean isValidFile(MultipartFile multipartFile){
         log.info("Empty Status ==> {}", multipartFile.isEmpty());
         if (Objects.isNull(multipartFile.getOriginalFilename())){

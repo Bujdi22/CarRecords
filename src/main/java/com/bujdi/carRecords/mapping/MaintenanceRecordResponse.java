@@ -2,13 +2,7 @@ package com.bujdi.carRecords.mapping;
 
 import com.bujdi.carRecords.model.MaintenanceRecord;
 import com.bujdi.carRecords.model.Media;
-import com.bujdi.carRecords.model.Vehicle;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +18,7 @@ public class MaintenanceRecordResponse {
     private LocalDate date;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private int vehicleId;
 
     public MaintenanceRecordResponse(MaintenanceRecord record, List<Media> media) {
         this.id = record.getId();
@@ -33,5 +28,6 @@ public class MaintenanceRecordResponse {
         this.createdAt = record.getCreatedAt();
         this.updatedAt = record.getUpdatedAt();
         this.media = media;
+        this.vehicleId = record.getVehicle().getId();
     }
 }

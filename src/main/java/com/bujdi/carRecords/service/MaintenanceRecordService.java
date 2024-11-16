@@ -3,6 +3,7 @@ package com.bujdi.carRecords.service;
 import com.bujdi.carRecords.dto.MaintenanceRecordDto;
 import com.bujdi.carRecords.dto.MaintenanceRecordUpdateDto;
 import com.bujdi.carRecords.model.MaintenanceRecord;
+import com.bujdi.carRecords.model.Media;
 import com.bujdi.carRecords.model.Vehicle;
 import com.bujdi.carRecords.repository.MaintenanceRecordRepository;
 import jakarta.persistence.EntityManager;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class MaintenanceRecordService {
     @Autowired
     MaintenanceRecordRepository repo;
+
+    @Autowired
+    MediaService mediaService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -37,7 +41,6 @@ public class MaintenanceRecordService {
         record.setVehicle(vehicleRef);
         record.setTitle(dto.getTitle());
         record.setDescription(dto.getDescription());
-        System.out.println("lala=" + record.getDescriptionJson());
         record.setDate(dto.getDate());
 
         record.setCreatedAt(now);
@@ -55,6 +58,19 @@ public class MaintenanceRecordService {
         record.setDescription(dto.getDescription());
         record.setDate(dto.getDate());
         record.setUpdatedAt(LocalDateTime.now());
+
+
+        if (dto.getDeleteFiles() != null && !dto.getDeleteFiles().isEmpty()) {
+            for (String fileId : dto.getDeleteFiles()) {
+                Optional<Media> optionalMedia = mediaService.getMediaById(fileId);
+                if (optionalMedia.isPresent()) {
+                    Media media = optionalMedia.get();
+                    if (mediaService.validateAccess(media)) {
+                        mediaService.deleteMedia(media);
+                    }
+                }
+            }
+        }
 
         return repo.save(record);
     }

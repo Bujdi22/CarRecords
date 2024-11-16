@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -18,4 +19,7 @@ public class MaintenanceRecordUpdateDto {
     @NotNull(message = "The date is required")
     @PastOrPresent(message = "The date cannot be in the future")
     private LocalDate date;
+
+    @Size(max = 50, message = "You can delete up to 50 files at once")
+    private List<@NotEmpty(message = "Each file identifier must be a non-empty string.") String> deleteFiles;
 }

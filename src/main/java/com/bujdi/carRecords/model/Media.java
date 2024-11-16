@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +21,7 @@ public class Media {
     private String modelType;
     private int modelId;
     private String fileType;
+    private LocalDateTime createdAt;
 
     public String getStoredPath() {
         return this.id.toString() + "." + this.fileType;

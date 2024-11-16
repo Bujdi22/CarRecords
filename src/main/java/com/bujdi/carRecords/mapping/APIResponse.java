@@ -1,4 +1,4 @@
-package com.bujdi.carRecords.dto;
+package com.bujdi.carRecords.mapping;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

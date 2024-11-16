@@ -1,12 +1,14 @@
 package com.bujdi.carRecords.controller;
 
-import com.bujdi.carRecords.dto.APIResponse;
+import com.bujdi.carRecords.mapping.APIResponse;
 import com.bujdi.carRecords.dto.FileUploadDto;
 import com.bujdi.carRecords.exception.FileDownloadException;
 import com.bujdi.carRecords.exception.FileEmptyException;
 import com.bujdi.carRecords.exception.FileUploadException;
+import com.bujdi.carRecords.model.Media;
 import com.bujdi.carRecords.service.FileService;
 import com.bujdi.carRecords.service.MediaService;
+import com.bujdi.carRecords.validation.annotation.ExistsInDatabase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -23,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -80,13 +79,27 @@ public class FileUploadController {
     }
 
 
-    @GetMapping("/download")
-    public ResponseEntity<?> downloadFile(@RequestParam("fileName") @NotBlank @NotNull String fileName) throws FileDownloadException, IOException {
+    @GetMapping("/download/{mediaId}")
+    public ResponseEntity<?> downloadFile(@PathVariable("mediaId") @NotBlank @NotNull String mediaId) throws FileDownloadException, IOException {
+
+        Optional<Media> media = mediaService.getMediaById(mediaId);
+
+        if (media.isEmpty() || !mediaService.validateAccess(media.get())) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        String fileName = media.get().getStoredPath();
+
         InputStream inputStream = fileService.downloadFile(fileName);
 
         if (inputStream != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
+            headers.setCacheControl("public, max-age=36000");
+            String etag = "W/\"" + mediaId + "\"";
+            headers.setETag(etag);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .headers(headers)
                     .body(new InputStreamResource(inputStream));
         } else {
             APIResponse apiResponse = APIResponse.builder()

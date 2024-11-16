@@ -2,12 +2,16 @@ package com.bujdi.carRecords.controller;
 
 import com.bujdi.carRecords.dto.MaintenanceRecordDto;
 import com.bujdi.carRecords.dto.MaintenanceRecordUpdateDto;
+import com.bujdi.carRecords.mapping.MaintenanceRecordResponse;
 import com.bujdi.carRecords.model.MaintenanceRecord;
+import com.bujdi.carRecords.model.Media;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.model.Vehicle;
+import com.bujdi.carRecords.service.MediaService;
 import com.bujdi.carRecords.service.UserService;
 import com.bujdi.carRecords.service.VehicleService;
 import com.bujdi.carRecords.service.MaintenanceRecordService;
+import com.sun.tools.javac.Main;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +34,9 @@ public class MaintenanceRecordController {
     @Autowired
     MaintenanceRecordService recordService;
 
+    @Autowired
+    MediaService mediaService;
+
 
     @GetMapping("/maintenance-records/{vehicleId}")
     public ResponseEntity<Object> getRecords(@PathVariable("vehicleId") int vehicleId) {
@@ -42,21 +49,30 @@ public class MaintenanceRecordController {
         }
 
         List<MaintenanceRecord> records = recordService.getRecordsForVehicle(vehicleId);
+        List<MaintenanceRecordResponse> response = records.stream()
+                .map(record -> {
+                    List<Media> media = mediaService.getMediaForModel(MaintenanceRecord.class, record.getId());
+                    return new MaintenanceRecordResponse(record, media);
+                })
+                .toList();
 
-        return new ResponseEntity<>(records, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/maintenance-records/single-record/{recordId}")
     public ResponseEntity<Object> getSingleRecord(@PathVariable("recordId") int recordId) {
         User user = userService.getAuthUser();
 
-        Optional<MaintenanceRecord> record = recordService.getRecordById(recordId);
+        Optional<MaintenanceRecord> optionalRecord = recordService.getRecordById(recordId);
 
-        if (record.isEmpty() || record.get().getVehicle().getUser().getId() != user.getId()) {
+        if (optionalRecord.isEmpty() || optionalRecord.get().getVehicle().getUser().getId() != user.getId()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(record.get(), HttpStatus.OK);
+        MaintenanceRecord record = optionalRecord.get();
+        List<Media> media = mediaService.getMediaForModel(MaintenanceRecord.class, record.getId());
+
+        return new ResponseEntity<>(new MaintenanceRecordResponse(record, media), HttpStatus.OK);
     }
 
     @PostMapping("/maintenance-records")
@@ -66,9 +82,9 @@ public class MaintenanceRecordController {
 
     @PutMapping("/maintenance-records/{recordId}")
     public ResponseEntity<Object> updateRecord(
-        @PathVariable("recordId") int recordId,
-        @Valid @RequestBody MaintenanceRecordUpdateDto dto
-    ){
+            @PathVariable("recordId") int recordId,
+            @Valid @RequestBody MaintenanceRecordUpdateDto dto
+    ) {
         User user = userService.getAuthUser();
 
         Optional<MaintenanceRecord> record = recordService.getRecordById(recordId);

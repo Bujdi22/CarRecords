@@ -19,5 +19,9 @@ public class Media {
     private UUID id;
     private String modelType;
     private int modelId;
-    private String filename;
+    private String fileType;
+
+    public String getStoredPath() {
+        return this.id.toString() + "." + this.fileType;
+    }
 }

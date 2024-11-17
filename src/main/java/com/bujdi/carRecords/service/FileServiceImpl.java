@@ -3,6 +3,7 @@ package com.bujdi.carRecords.service;
 import com.bujdi.carRecords.exception.FileDownloadException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,10 +28,19 @@ public class FileServiceImpl implements FileService {
 
     private final S3Client s3Client;
 
+    @Autowired
+    private CompressionService compressionService;
+
     @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         // Generate file name
         String fileName = generateFileName(multipartFile);
+
+        String contentType = multipartFile.getContentType();
+
+        if ("image/jpeg".equals(contentType) || "image/png".equals(contentType)) {
+            multipartFile = compressionService.compressImage(multipartFile);
+        }
 
         // Create metadata
         Map<String, String> metadata = new HashMap<>();

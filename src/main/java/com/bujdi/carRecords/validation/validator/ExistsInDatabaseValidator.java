@@ -12,6 +12,8 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Predicate;
 
+import java.util.UUID;
+
 @Slf4j
 public class ExistsInDatabaseValidator implements ConstraintValidator<ExistsInDatabase, Object> {
 
@@ -42,7 +44,7 @@ public class ExistsInDatabaseValidator implements ConstraintValidator<ExistsInDa
             Predicate mainPredicate = cb.equal(root.get(field), value);
 
             if (belongsToUser) {
-                int userId = userService.getAuthUser().getId();
+                UUID userId = userService.getAuthUser().getId();
                 Predicate userPredicate = cb.equal(root.get("user").get("id"), userId);
                 mainPredicate = cb.and(mainPredicate, userPredicate);
             }

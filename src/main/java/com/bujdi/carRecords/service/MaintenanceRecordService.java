@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MaintenanceRecordService {
@@ -28,7 +29,7 @@ public class MaintenanceRecordService {
     private EntityManager entityManager;
 
 
-    public List<MaintenanceRecord> getRecordsForVehicle(int vehicleId) {
+    public List<MaintenanceRecord> getRecordsForVehicle(UUID vehicleId) {
         return repo.findByVehicleIdAndDeletedAtIsNull(vehicleId);
     }
 
@@ -49,7 +50,7 @@ public class MaintenanceRecordService {
         return repo.save(record);
     }
 
-    public Optional<MaintenanceRecord> getRecordById(int recordId) {
+    public Optional<MaintenanceRecord> getRecordById(UUID recordId) {
         return repo.findByIdAndDeletedAtIsNull(recordId);
     }
 

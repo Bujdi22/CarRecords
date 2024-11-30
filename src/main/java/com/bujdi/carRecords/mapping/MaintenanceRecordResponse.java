@@ -8,17 +8,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 public class MaintenanceRecordResponse {
     private List<Media> media;
-    private int id;
+    private UUID id;
     private String title;
     private Map<String, Object> description;
     private LocalDate date;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private int vehicleId;
+    private UUID vehicleId;
 
     public MaintenanceRecordResponse(MaintenanceRecord record, List<Media> media) {
         this.id = record.getId();

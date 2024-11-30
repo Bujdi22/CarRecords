@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface MediaRepository extends JpaRepository<Media, UUID> {
     @Query("SELECT m FROM Media m WHERE m.modelId = :modelId AND m.modelType = :modelType")
-    List<Media> findMediaByModelIdAndModelType(@Param("modelId") int modelId, @Param("modelType") String modelType);
+    List<Media> findMediaByModelIdAndModelType(@Param("modelId") UUID modelId, @Param("modelType") String modelType);
 }

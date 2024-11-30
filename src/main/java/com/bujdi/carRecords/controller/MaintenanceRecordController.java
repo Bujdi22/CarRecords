@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("/api")
 @RestController
@@ -39,12 +40,12 @@ public class MaintenanceRecordController {
 
 
     @GetMapping("/maintenance-records/{vehicleId}")
-    public ResponseEntity<Object> getRecords(@PathVariable("vehicleId") int vehicleId) {
+    public ResponseEntity<Object> getRecords(@PathVariable("vehicleId") UUID vehicleId) {
         User user = userService.getAuthUser();
 
         Optional<Vehicle> vehicle = vehicleService.getVehicleById(vehicleId);
 
-        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+        if (vehicle.isEmpty() || !vehicle.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -60,12 +61,12 @@ public class MaintenanceRecordController {
     }
 
     @GetMapping("/maintenance-records/single-record/{recordId}")
-    public ResponseEntity<Object> getSingleRecord(@PathVariable("recordId") int recordId) {
+    public ResponseEntity<Object> getSingleRecord(@PathVariable("recordId") UUID recordId) {
         User user = userService.getAuthUser();
 
         Optional<MaintenanceRecord> optionalRecord = recordService.getRecordById(recordId);
 
-        if (optionalRecord.isEmpty() || optionalRecord.get().getVehicle().getUser().getId() != user.getId()) {
+        if (optionalRecord.isEmpty() || !optionalRecord.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -82,14 +83,14 @@ public class MaintenanceRecordController {
 
     @PutMapping("/maintenance-records/{recordId}")
     public ResponseEntity<Object> updateRecord(
-            @PathVariable("recordId") int recordId,
+            @PathVariable("recordId") UUID recordId,
             @Valid @RequestBody MaintenanceRecordUpdateDto dto
     ) {
         User user = userService.getAuthUser();
 
         Optional<MaintenanceRecord> record = recordService.getRecordById(recordId);
 
-        if (record.isEmpty() || record.get().getVehicle().getUser().getId() != user.getId()) {
+        if (record.isEmpty() || !record.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -97,12 +98,12 @@ public class MaintenanceRecordController {
     }
 
     @DeleteMapping("/maintenance-records/{recordId}")
-    public ResponseEntity<Object> deleteRecord(@PathVariable("recordId") int recordId) {
+    public ResponseEntity<Object> deleteRecord(@PathVariable("recordId") UUID recordId) {
         User user = userService.getAuthUser();
 
         Optional<MaintenanceRecord> record = recordService.getRecordById(recordId);
 
-        if (record.isEmpty() || record.get().getVehicle().getUser().getId() != user.getId()) {
+        if (record.isEmpty() || !record.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class VehicleService {
@@ -39,7 +40,7 @@ public class VehicleService {
         return repo.save(vehicle);
     }
 
-    public Optional<Vehicle> getVehicleById(int vehicleId) {
+    public Optional<Vehicle> getVehicleById(UUID vehicleId) {
         return repo.findByIdAndDeletedAtIsNull(vehicleId);
     }
 

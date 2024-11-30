@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.model;
 
+import com.bujdi.carRecords.validation.AccessValidatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,16 +11,17 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Vehicle {
+public class Vehicle  implements AccessValidatable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -42,4 +44,14 @@ public class Vehicle {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
+    @Override
+    public boolean hasUserAccess(UUID userId) {
+        User user = this.getUser();
+        if (user == null) {
+            return false;
+        }
+
+        return user.getId().equals(userId);
+    }
 }

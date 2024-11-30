@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("/api")
 @RestController
@@ -32,12 +33,12 @@ public class VehicleController {
     }
 
     @GetMapping("/vehicles/{vehicleId}")
-    public ResponseEntity<Object> getVehicle(@PathVariable("vehicleId") int vehicleId) {
+    public ResponseEntity<Object> getVehicle(@PathVariable("vehicleId") UUID vehicleId) {
         User user = userService.getAuthUser();
 
         Optional<Vehicle> vehicle = service.getVehicleById(vehicleId);
 
-        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+        if (vehicle.isEmpty() || !vehicle.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -55,14 +56,14 @@ public class VehicleController {
 
     @PutMapping("/vehicles/{vehicleId}")
     public ResponseEntity<Object> updateVehicle(
-        @PathVariable("vehicleId") int vehicleId,
+        @PathVariable("vehicleId") UUID vehicleId,
         @Valid @RequestBody VehicleDto vehicleDto
     ){
         User user = userService.getAuthUser();
 
         Optional<Vehicle> vehicle = service.getVehicleById(vehicleId);
 
-        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+        if (vehicle.isEmpty() || !vehicle.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -70,13 +71,13 @@ public class VehicleController {
     }
 
     @DeleteMapping("/vehicles/{vehicleId}")
-    public ResponseEntity<Object> deleteVehicle(@PathVariable("vehicleId") int vehicleId) {
+    public ResponseEntity<Object> deleteVehicle(@PathVariable("vehicleId") UUID vehicleId) {
 
         User user = userService.getAuthUser();
 
         Optional<Vehicle> vehicle = service.getVehicleById(vehicleId);
 
-        if (vehicle.isEmpty() || vehicle.get().getUser().getId() != user.getId()) {
+        if (vehicle.isEmpty() || !vehicle.get().hasUserAccess(user.getId())) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         

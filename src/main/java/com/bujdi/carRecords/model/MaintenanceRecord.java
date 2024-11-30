@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -24,8 +25,8 @@ import java.util.Map;
 @ToString
 public class MaintenanceRecord implements AccessValidatable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "vehicle_id", nullable = false)
@@ -68,7 +69,7 @@ public class MaintenanceRecord implements AccessValidatable {
     }
 
     @Override
-    public boolean hasUserAccess(int userId) {
+    public boolean hasUserAccess(UUID userId) {
         if (vehicle == null) {
             return false;
         }
@@ -77,6 +78,6 @@ public class MaintenanceRecord implements AccessValidatable {
             return false;
         }
 
-        return user.getId() == userId;
+        return user.getId().equals(userId);
     }
 }

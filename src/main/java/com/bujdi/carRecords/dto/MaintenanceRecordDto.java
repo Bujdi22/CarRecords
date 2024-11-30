@@ -6,11 +6,13 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class MaintenanceRecordDto extends MaintenanceRecordUpdateDto{
 
-    @Min(value = 1, message = "The vehicle is required")
+    @NotNull
     @ExistsInDatabase(entity = Vehicle.class, field = "id", message = "Vehicle does not exist", belongsToUser = true)
-    private int vehicleId;
+    private UUID vehicleId;
 }

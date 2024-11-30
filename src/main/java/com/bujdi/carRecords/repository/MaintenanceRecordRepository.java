@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRecord, Integer> {
-    List<MaintenanceRecord> findByVehicleIdAndDeletedAtIsNull(int vehicleId);
-    Optional<MaintenanceRecord> findByIdAndDeletedAtIsNull(int maintenanceRecordId);
+public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRecord, UUID> {
+    List<MaintenanceRecord> findByVehicleIdAndDeletedAtIsNull(UUID vehicleId);
+    Optional<MaintenanceRecord> findByIdAndDeletedAtIsNull(UUID maintenanceRecordId);
 }

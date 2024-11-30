@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 @Data
 public class FileUploadDto {
     @NotNull(message = "File is required")
@@ -15,5 +17,5 @@ public class FileUploadDto {
     private String modelType;
 
     @NotNull(message = "Model ID is required")
-    private int modelId;
+    private UUID modelId;
 }

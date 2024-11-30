@@ -19,7 +19,7 @@ public class Media {
     @Id
     private UUID id;
     private String modelType;
-    private int modelId;
+    private UUID modelId;
     private String fileType;
     private LocalDateTime createdAt;
 

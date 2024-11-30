@@ -33,7 +33,7 @@ public class MediaService {
     @Autowired
     private MediaRepository mediaRepository;
 
-    public Boolean validateAccess(String modelType, int id) {
+    public Boolean validateAccess(String modelType, UUID id) {
         Class<? extends AccessValidatable> modelClass = getClassFromTypeString(modelType);
 
         AccessValidatable entity = entityManager.find(modelClass, id);
@@ -51,7 +51,7 @@ public class MediaService {
 
     public Boolean validateAccess(Media media) {
         String typeString = media.getModelType();
-        int id = media.getModelId();
+        UUID id = media.getModelId();
 
         return this.validateAccess(typeString, id);
     }
@@ -73,7 +73,7 @@ public class MediaService {
         return fileName;
     }
 
-    public List<Media> getMediaForModel(Class<? extends AccessValidatable> model, int id)
+    public List<Media> getMediaForModel(Class<? extends AccessValidatable> model, UUID id)
     {
         String mediaTypeString = getTypeStringFromClass(model);
 

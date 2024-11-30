@@ -1,7 +1,7 @@
 package com.bujdi.carRecords.service;
 
 import com.bujdi.carRecords.dto.UserDto;
-import com.bujdi.carRecords.helper.UrlGenerator;
+import com.bujdi.carRecords.utils.UrlGenerator;
 import com.bujdi.carRecords.model.SecureToken;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.model.UserPrincipal;
@@ -42,11 +42,15 @@ public class UserService {
         User user = createUserFromDto(dto);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
+        sendWelcomeEmail(user);
+        repo.save(user);
+    }
+
+    public void sendWelcomeEmail(User user) {
         emailService.sendEmail(user,
                 "Welcome",
                 "<p>We hope you enjoy our application and welcome to the team!</p>"
         );
-        repo.save(user);
     }
 
 
@@ -56,14 +60,14 @@ public class UserService {
             User loggedInUser = repo.findByUsername(user.getUsername());
             loggedInUser.setLastLogin(LocalDateTime.now());
             repo.save(loggedInUser);
-            return this.generateTokenForUser(user);
+            return this.generateTokenForUser(user, true);
         } catch (BadCredentialsException e) {
             return null;
         }
     }
 
-    public String generateTokenForUser(User user) {
-        return jwtService.generateToken(user.getUsername());
+    public String generateTokenForUser(User user, Boolean isLong) {
+        return jwtService.generateToken(user.getUsername(), isLong);
     }
 
     public User getAuthUser() {

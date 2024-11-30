@@ -65,7 +65,7 @@ public class UserController {
     public ResponseEntity<String> refreshToken()
     {
         User user = service.getAuthUser();
-        String token = service.generateTokenForUser(user);
+        String token = service.generateTokenForUser(user, true);
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }

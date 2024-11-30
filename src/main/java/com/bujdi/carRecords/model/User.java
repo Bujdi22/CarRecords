@@ -23,6 +23,7 @@ public class User {
     private String role = "ROLE_USER";
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
+    private String googleId;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

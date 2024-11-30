@@ -1,4 +1,4 @@
-package com.bujdi.carRecords.helper;
+package com.bujdi.carRecords.utils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

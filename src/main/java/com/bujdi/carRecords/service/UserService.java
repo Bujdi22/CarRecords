@@ -1,6 +1,7 @@
 package com.bujdi.carRecords.service;
 
 import com.bujdi.carRecords.dto.UserDto;
+import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.utils.UrlGenerator;
 import com.bujdi.carRecords.model.SecureToken;
 import com.bujdi.carRecords.model.User;
@@ -42,28 +43,40 @@ public class UserService {
         User user = createUserFromDto(dto);
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        sendWelcomeEmail(user);
         repo.save(user);
+        sendWelcomeEmail(user);
     }
 
     public void sendWelcomeEmail(User user) {
-        emailService.sendEmail(user,
-                "Welcome",
-                "<p>We hope you enjoy our application and welcome to the team!</p>"
-        );
+        String content = "<p>We hope you enjoy our application and welcome to the team!</p>";
+        String subject = "Welcome to AutoJournal";
+
+
+        if (user.getGoogleId() == null) {
+            SecureToken token = new SecureToken();
+            token.setUser(user);
+            token.setPurpose("verify-email");
+            token.setExpiryDate(LocalDateTime.now().plusDays(14));
+            tokenRepo.save(token);
+            String verifyLink = UrlGenerator.generateUrl("/verifyEmail?token=" + token.getToken());
+            content += "<p>Please verify your e-mail by clicking the link below</p>"
+                        +"<p><a href='" + verifyLink + "'> Verify your e-mail</a></p>";
+            subject = "Please verify your e-mail";
+        }
+
+        emailService.sendEmail(user, subject, content);
     }
 
 
-    public String verify(User user) {
-        try {
-            Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            User loggedInUser = repo.findByUsername(user.getUsername());
-            loggedInUser.setLastLogin(LocalDateTime.now());
-            repo.save(loggedInUser);
-            return this.generateTokenForUser(user, true);
-        } catch (BadCredentialsException e) {
-            return null;
+    public String verify(User user) throws AccountNotVerified, BadCredentialsException{
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        User loggedInUser = repo.findByUsername(user.getUsername());
+        if (!loggedInUser.isEmailVerified()) {
+            throw new AccountNotVerified("Your account is not verified");
         }
+        loggedInUser.setLastLogin(LocalDateTime.now());
+        repo.save(loggedInUser);
+        return this.generateTokenForUser(user, true);
     }
 
     public String generateTokenForUser(User user, Boolean isLong) {
@@ -128,6 +141,27 @@ public class UserService {
         User user = secureToken.getUser();
         user.setPassword(encoder.encode(password));
         repo.save(user);
+        tokenRepo.delete(secureToken);
+
+        return true;
+    }
+
+    public boolean verifyEmail(String token) {
+        SecureToken secureToken = tokenRepo.findToken(token);
+        if (secureToken == null) {
+            return false;
+        }
+        if (!secureToken.getPurpose().equals("verify-email")) {
+            return false;
+        }
+        if (secureToken.isExpired()) {
+            return false;
+        }
+
+        User user = secureToken.getUser();
+        user.setEmailVerified(true);
+        repo.save(user);
+
         tokenRepo.delete(secureToken);
 
         return true;

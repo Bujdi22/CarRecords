@@ -3,6 +3,8 @@ package com.bujdi.carRecords.controller;
 import com.bujdi.carRecords.dto.ForgotPasswordDto;
 import com.bujdi.carRecords.dto.ResetPasswordDto;
 import com.bujdi.carRecords.dto.UserDto;
+import com.bujdi.carRecords.dto.VerifyEmailDTO;
+import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.mapping.UserAccountMapping;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.service.RecaptchaService;
@@ -11,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -38,10 +41,14 @@ public class UserController {
     @PostMapping("/api/login")
     public ResponseEntity<String> login(@RequestBody User user)
     {
-        String token = service.verify(user);
-        return token == null
-                ? new ResponseEntity<>("Bad credentials", HttpStatus.FORBIDDEN)
-                : new ResponseEntity<>(token, HttpStatus.OK);
+        try {
+            String token = service.verify(user);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (AccountNotVerified ex) {
+            return new ResponseEntity<>("Your account is not verified", HttpStatus.FORBIDDEN);
+        } catch (BadCredentialsException ex) {
+            return new ResponseEntity<>("Bad credentials", HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/api/fetch-account")
@@ -92,5 +99,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/api/verify-email")
+    public ResponseEntity<Object> verifyEmail(@Valid @RequestBody VerifyEmailDTO dto)
+    {
+        boolean success = this.service.verifyEmail(dto.getToken());
+
+        if (success) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(Map.of(
+                    "errors", Map.of("Rejected", "Your verify link might have expired.")
+            ), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

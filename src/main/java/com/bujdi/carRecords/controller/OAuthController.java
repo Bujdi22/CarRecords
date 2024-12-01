@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.controller;
 
+import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.mapping.GoogleProfile;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.service.GoogleService;
@@ -36,13 +37,15 @@ public class OAuthController {
             return new ResponseEntity<>("Sorry - something went wrong with the Google authentication flow.", HttpStatus.NOT_FOUND);
         }
 
-        User user = googleService.getUserFromGoogleProfile(googleProfile);
-
-        String authToken = userService.generateTokenForUser(user, false);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(UrlGenerator.generateUrl("/google-auth-success?token=" + authToken)));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        try {
+            User user = googleService.getUserFromGoogleProfile(googleProfile);
+            String authToken = userService.generateTokenForUser(user, false);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(UrlGenerator.generateUrl("/google-auth-success?token=" + authToken)));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        } catch (AccountNotVerified ex) {
+            return new ResponseEntity<>("Sorry - it seems like your google account e-mail address is not verified.", HttpStatus.NOT_FOUND);
+        }
     }
 
 }

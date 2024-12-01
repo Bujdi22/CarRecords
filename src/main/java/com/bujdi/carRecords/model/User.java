@@ -24,6 +24,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime lastLogin;
     private String googleId;
+    private boolean emailVerified;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

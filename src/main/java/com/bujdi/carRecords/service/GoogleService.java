@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.service;
 
+import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.mapping.GoogleProfile;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.repository.UserRepository;
@@ -90,7 +91,7 @@ public class GoogleService {
         }
     }
 
-    public User getUserFromGoogleProfile(GoogleProfile googleProfile) {
+    public User getUserFromGoogleProfile(GoogleProfile googleProfile) throws AccountNotVerified {
         User userByGoogleId = userRepository.findByGoogleId(googleProfile.getId());
 
         if (userByGoogleId != null) {
@@ -123,14 +124,18 @@ public class GoogleService {
         return params;
     }
 
-    private User registerNewUser(GoogleProfile googleProfile)
+    private User registerNewUser(GoogleProfile googleProfile) throws AccountNotVerified
     {
+        if (!googleProfile.isVerifiedEmail())  {
+            throw new AccountNotVerified("The account e-mail is not verified");
+        }
         User user = new User();
         user.setUsername(googleProfile.getEmail());
         user.setDisplayName(googleProfile.getName());
         user.setCreatedAt(LocalDateTime.now());
         user.setLastLogin(LocalDateTime.now());
         user.setGoogleId(googleProfile.getId());
+        user.setEmailVerified(true);
         userRepository.save(user);
         userService.sendWelcomeEmail(user);
 

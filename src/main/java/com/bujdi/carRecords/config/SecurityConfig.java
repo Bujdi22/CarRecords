@@ -34,7 +34,7 @@ public class SecurityConfig {
         return http.csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/login", "/api/register", "/api/forgot-password-request", "/api/forgot-password", "/api/health", "/google-redirect-uri").permitAll()
+                .requestMatchers("/api/login", "/api/register", "/api/forgot-password-request", "/api/forgot-password", "/api/health", "/google-redirect-uri", "/api/verify-email").permitAll()
                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

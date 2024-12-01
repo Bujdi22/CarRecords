@@ -1,9 +1,6 @@
 package com.bujdi.carRecords.controller;
 
-import com.bujdi.carRecords.dto.ForgotPasswordDto;
-import com.bujdi.carRecords.dto.ResetPasswordDto;
-import com.bujdi.carRecords.dto.UserDto;
-import com.bujdi.carRecords.dto.VerifyEmailDTO;
+import com.bujdi.carRecords.dto.*;
 import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.mapping.UserAccountMapping;
 import com.bujdi.carRecords.model.User;
@@ -110,6 +107,22 @@ public class UserController {
             return new ResponseEntity<>(Map.of(
                     "errors", Map.of("Rejected", "Your verify link might have expired.")
             ), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/api/update-account")
+    public ResponseEntity<Object> updateAccount(@Valid @RequestBody UpdateAccountDTO dto)
+    {
+        try {
+            User user = service.updateUserAccount(dto);
+
+            Map<String, Object> response = UserAccountMapping.mapUserToResponse(user);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (BadCredentialsException ex) {
+            return new ResponseEntity<>(
+                    Map.of("errors", Map.of("currentPassword", "You provided the incorrect password"))
+                    , HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 

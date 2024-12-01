@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.service;
 
+import com.bujdi.carRecords.dto.UpdateAccountDTO;
 import com.bujdi.carRecords.dto.UserDto;
 import com.bujdi.carRecords.exception.AccountNotVerified;
 import com.bujdi.carRecords.utils.UrlGenerator;
@@ -165,5 +166,19 @@ public class UserService {
         tokenRepo.delete(secureToken);
 
         return true;
+    }
+
+    public User updateUserAccount(UpdateAccountDTO dto) throws BadCredentialsException
+    {
+        User user = getAuthUser();
+
+        user.setDisplayName(dto.getDisplayName());
+
+        if (dto.getPassword() != null) {
+            authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), dto.getCurrentPassword()));
+            user.setPassword(encoder.encode(dto.getPassword()));
+        }
+
+        return repo.save(user);
     }
 }

@@ -16,6 +16,11 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
+
+        if (password == null) {
+            return true;
+        }
+
         PasswordValidator validator = new PasswordValidator(Arrays.asList(
                 // at least 8 characters
                 new LengthRule(8, 30),
@@ -42,7 +47,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
         }
         List<String> messages = validator.getMessages(result);
 
-        String messageTemplate = String.join(",", messages);
+        String messageTemplate = String.join(";", messages);
         context.buildConstraintViolationWithTemplate(messageTemplate)
                 .addConstraintViolation()
                 .disableDefaultConstraintViolation();

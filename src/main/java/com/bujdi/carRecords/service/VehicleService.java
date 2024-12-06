@@ -35,6 +35,7 @@ public class VehicleService {
         vehicle.setModel(dto.getModel());
         vehicle.setDisplayName(dto.getDisplayName());
         vehicle.setYear(dto.getYear());
+        vehicle.setRegistration(dto.getRegistration());
         vehicle.setUpdatedAt(LocalDateTime.now());
 
         return repo.save(vehicle);

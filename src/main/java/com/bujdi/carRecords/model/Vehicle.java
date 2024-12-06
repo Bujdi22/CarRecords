@@ -39,6 +39,9 @@ public class Vehicle  implements AccessValidatable {
     private String model;
 
     @Column(nullable = false)
+    private String registration;
+
+    @Column(nullable = false)
     private int year;
 
     private LocalDateTime createdAt;

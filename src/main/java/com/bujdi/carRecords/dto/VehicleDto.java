@@ -22,6 +22,10 @@ public class VehicleDto {
     @Size(min = 2, max = 200, message = "The length of the name must be between 2 and 200 characters.")
     private String model;
 
+    @NotEmpty(message = "The registration required")
+    @Size(min = 2, max = 200, message = "The length of the registration must be between 2 and 50 characters.")
+    private String registration;
+
     @Min(value = 1900, message = "The year must not be earlier than 1900")
     @Max(value = 2100, message = "The year cannot be after 2100")
     private int year;
@@ -33,6 +37,7 @@ public class VehicleDto {
         vehicle.setMake(this.getMake());
         vehicle.setModel(this.getModel());
         vehicle.setYear(this.getYear());
+        vehicle.setRegistration(this.getRegistration());
 
         return vehicle;
     }

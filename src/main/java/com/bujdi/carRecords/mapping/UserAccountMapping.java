@@ -11,7 +11,9 @@ public class UserAccountMapping {
                 "displayName", user.getDisplayName(),
                 "username", user.getUsername(),
                 "role", user.getRole(),
-                "createdAt", user.getCreatedAt()
+                "createdAt", user.getCreatedAt(),
+                "verifiesWithPassword", user.getPassword() != null,
+                "verifiesWithGoogle", user.getGoogleId() != null
         );
     }
 }

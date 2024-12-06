@@ -101,7 +101,7 @@ public class UserService {
             String resetUrl = UrlGenerator.generateUrl("/resetPassword?token=" + token.getToken());
 
             emailService.sendEmail(user,
-                    "Forgot password",
+                    "Password Reset",
                     "<p>You requested a password reset.</p>" +
                             "<p>Please click the link below to reset your password.</p>" +
                             "<p>This link will only work for 30 minutes</p>" +

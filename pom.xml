@@ -143,6 +143,12 @@
             <version>0.4.20</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>6.6.3.Final</version>
+        </dependency>
+
     </dependencies>
 
     <build>

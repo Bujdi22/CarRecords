@@ -24,4 +24,10 @@ MAIL_SMTP_TLS=false
 
 GOOGLE_OAUTH_CLIENT=
 GOOGLE_OAUTH_SECRET=
+
+#APP_URL=https://autojournalapp.com
+#SERVER_URL=https://api.autojournalapp.com
+
+APP_URL=http://localhost:8100
+SERVER_URL=http://localhost:8080
 ```

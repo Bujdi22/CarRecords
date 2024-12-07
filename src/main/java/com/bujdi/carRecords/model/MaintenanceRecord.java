@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.model;
 
+import com.bujdi.carRecords.utils.AuditableField;
 import com.bujdi.carRecords.validation.AccessValidatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Audited
 public class MaintenanceRecord implements AccessValidatable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,12 +38,15 @@ public class MaintenanceRecord implements AccessValidatable {
     private Vehicle vehicle;
 
     @Column(nullable = false)
+    @AuditableField
     private String title;
 
     @JsonIgnore
     @Column(name = "description_json", columnDefinition = "TEXT")
+    @AuditableField
     private String descriptionJson;
 
+    @AuditableField
     private LocalDate date;
 
     private LocalDateTime createdAt;

@@ -70,6 +70,7 @@ public class UserController {
     {
         User user = service.getAuthUser();
         String token = service.generateTokenForUser(user, true);
+        service.updateLastLogin(user);
 
         return new ResponseEntity<>(token, HttpStatus.OK);
     }

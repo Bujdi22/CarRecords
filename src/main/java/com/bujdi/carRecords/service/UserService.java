@@ -75,9 +75,13 @@ public class UserService {
         if (!loggedInUser.isEmailVerified()) {
             throw new AccountNotVerified("Your account is not verified");
         }
-        loggedInUser.setLastLogin(LocalDateTime.now());
-        repo.save(loggedInUser);
+        updateLastLogin(loggedInUser);
         return this.generateTokenForUser(user, true);
+    }
+
+    public void updateLastLogin(User user) {
+        user.setLastLogin(LocalDateTime.now());
+        repo.save(user);
     }
 
     public String generateTokenForUser(User user, Boolean isLong) {

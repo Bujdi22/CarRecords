@@ -1,0 +1,30 @@
+name: Deploy to EC2
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build JAR
+        run: mvn clean package -DskipTests
+      - name: Add AWS Key
+        run: |
+          echo "$AWS_EC2_KEY" > aws_rsa
+          chmod 600 aws_rsa
+        env:
+          AWS_EC2_KEY: ${{ secrets.AWS_EC2_KEY }}
+      - name: SCP Jar to EC2
+        run: scp -i aws_rsa target/autojournal-prod.jar ec2-user@ec2-3-252-58-26.eu-west-1.compute.amazonaws.com:~/app/
+      - name: Restart App
+        run: |
+          ssh -i aws_rsa ec2-user@ec2-3-252-58-26.eu-west-1.compute.amazonaws.com << 'EOF'
+          pkill -f 'java -jar' || true
+          nohup java -jar ~/app/autojournal-prod.jar > ~/app/logs.txt 2>&1 &
+          EOF
+      
+  

@@ -24,7 +24,8 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
         int statusCode = response.getStatus();
         long startTime = (long) request.getAttribute("startTime");
         long duration = System.currentTimeMillis() - startTime;
+        String method = request.getMethod();
 
-        logger.info("Endpoint: {} | Response Code: {} | Duration: {} ms", endpoint, statusCode, duration);
+        logger.info("Endpoint: {} {} | Response Code: {} | Duration: {} ms",method, endpoint, statusCode, duration);
     }
 }

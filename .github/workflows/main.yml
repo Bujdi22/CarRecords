@@ -34,7 +34,8 @@ jobs:
         run: |
           ssh -i aws_rsa ec2-user@ec2-3-252-58-26.eu-west-1.compute.amazonaws.com << 'EOF'
           pkill -f 'java -jar' || true
-          nohup java -jar ~/app/autojournal-prod.jar > ~/app/logs.txt 2>&1 &
+          cd app
+          nohup java -jar autojournal-prod.jar > ~/app/logs.txt 2>&1 &
           EOF
       
   

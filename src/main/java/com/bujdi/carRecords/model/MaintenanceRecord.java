@@ -41,6 +41,9 @@ public class MaintenanceRecord implements AccessValidatable {
     @AuditableField
     private String title;
 
+    @AuditableField
+    private Integer odometer;
+
     @JsonIgnore
     @Column(name = "description_json", columnDefinition = "TEXT")
     @AuditableField

@@ -20,6 +20,9 @@ public class MaintenanceRecordUpdateDto {
     @PastOrPresent(message = "The date cannot be in the future")
     private LocalDate date;
 
+    @NotNull(message = "The odometer reading is required")
+    private Integer odometer;
+
     @Size(max = 50, message = "You can delete up to 50 files at once")
     private List<@NotEmpty(message = "Each file identifier must be a non-empty string.") String> deleteFiles;
 }

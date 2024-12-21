@@ -15,6 +15,7 @@ public class MaintenanceRecordResponse {
     private List<Media> media;
     private UUID id;
     private String title;
+    private Integer odometer;
     private Map<String, Object> description;
     private LocalDate date;
     private LocalDateTime createdAt;
@@ -30,5 +31,6 @@ public class MaintenanceRecordResponse {
         this.updatedAt = record.getUpdatedAt();
         this.media = media;
         this.vehicleId = record.getVehicle().getId();
+        this.odometer = record.getOdometer();
     }
 }

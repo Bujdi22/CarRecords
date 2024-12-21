@@ -1,7 +1,7 @@
 # Auto Journal Project
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=Spring&logoColor=white)
 
-## environment variables
+## Environment variables
 Create a `env.properties` file in root, and fill in .env variables
 ```
 API_KEY=<api-key-here>
@@ -30,4 +30,15 @@ GOOGLE_OAUTH_SECRET=
 
 APP_URL=http://localhost:8100
 SERVER_URL=http://localhost:8080
+```
+## Flyway migrations
+
+create a `flyway.conf` file in root
+```
+flyway.url=jdbc:postgresql://localhost:5432/spring
+flyway.user=root
+flyway.password=root
+flyway.schemas=public
+
+; Command: mvn flyway:migrate
 ```

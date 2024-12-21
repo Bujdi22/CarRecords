@@ -43,6 +43,7 @@ public class MaintenanceRecordService {
         record.setTitle(dto.getTitle());
         record.setDescription(dto.getDescription());
         record.setDate(dto.getDate());
+        record.setOdometer(dto.getOdometer());
 
         record.setCreatedAt(now);
         record.setUpdatedAt(now);
@@ -58,6 +59,7 @@ public class MaintenanceRecordService {
         record.setTitle(dto.getTitle());
         record.setDescription(dto.getDescription());
         record.setDate(dto.getDate());
+        record.setOdometer(dto.getOdometer());
         record.setUpdatedAt(LocalDateTime.now());
 
 

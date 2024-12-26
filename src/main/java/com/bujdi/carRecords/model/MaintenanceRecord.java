@@ -17,6 +17,7 @@ import org.hibernate.envers.Audited;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -61,7 +62,6 @@ public class MaintenanceRecord implements AccessValidatable {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             this.descriptionJson = objectMapper.writeValueAsString(description);
-            System.out.println("json=" + this.descriptionJson);
         } catch (JsonProcessingException ex) {
             System.out.println("Failed to serialize JSON: " + ex.getMessage());
         }
@@ -71,6 +71,20 @@ public class MaintenanceRecord implements AccessValidatable {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(descriptionJson, Map.class);
+        } catch (IOException ex) {
+            System.out.println("Failed to deserialize JSON: " + ex.getMessage());
+            return null;
+        }
+    }
+
+    public String getDescriptionAsString() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String, Object> jsonMap = objectMapper.readValue(descriptionJson, Map.class);
+
+            List<String> descriptionList = (List<String>) jsonMap.get("items");
+
+            return String.join(";", descriptionList);
         } catch (IOException ex) {
             System.out.println("Failed to deserialize JSON: " + ex.getMessage());
             return null;

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Vehicle Export</title>
+    <style>
+        body {
+          font-family: sans-serif;
+        }
+        header img {
+          height: 50px;
+          padding: 12px;
+          background-color: #064B85;
+          border-radius: 5px;
+        }
+        header h1, p {
+          font-size: 16px;
+        }
+        header h1 {
+          margin-bottom: 0;
+        }
+        header p {
+          margin: 0;
+          margin-bottom: 5px;
+        }
+        table {
+          width: 100%;
+          margin-bottom: 20px;
+        }
+        th {
+          width: 20%;
+          text-align: left;
+        }
+        th {
+          border-bottom: 1px dashed grey;
+          padding: 10px;
+        }
+        td {
+            padding: 10px;
+        }
+        .record {
+            border-bottom: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <p>www.autojournalapp.com</p>
+    </div>
+    <img src="https://cloudfilesdm.com/postcards/image-1729931147282.png"/>
+</header>
+<table>
+    <tr>
+        <th>Vehicle Name:</th>
+        <td><span th:text="${name}"></span></td>
+    </tr>
+    <tr>
+        <th>Make:</th>
+        <td><span th:text="${make}"></span></td>
+    </tr>
+    <tr>
+        <th>Model:</th>
+        <td><span th:text="${model}"></span></td>
+    </tr>
+    <tr>
+        <th>Year:</th>
+        <td><span th:text="${year}"></span></td>
+    </tr>
+    <tr>
+        <th>Created:</th>
+        <td><span th:text="${created}"></span></td>
+    </tr>
+</table>
+
+<h3>Records</h3>
+
+<table th:each="record : ${records}" class="record">
+    <tr>
+        <th>Service: </th>
+        <td><span th:text="${record.title}"></span></td>
+    </tr>
+    <tr>
+        <th>Odometer: </th>
+        <td><span th:text="${record.odometer}"></span></td>
+    </tr>
+    <tr>
+        <th>Created At: </th>
+        <td><span th:text="${record.createdAt}"></span></td>
+    </tr>
+    <tr>
+        <th>Carried Out: </th>
+        <td><span th:text="${record.carriedOut}"></span></td>
+    </tr>
+    <tr>
+        <th>Serviced Items: </th>
+        <td><span th:text="${record.items}"></span></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -7,7 +7,9 @@ import com.bujdi.carRecords.service.UserService;
 import com.bujdi.carRecords.service.VehicleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,27 @@ public class VehicleController {
         User user = userService.getAuthUser();
 
         return service.getVehicles(user);
+    }
+
+    @GetMapping("/vehicles/export/{vehicleId}")
+    public ResponseEntity<Object> exportVehicle(@PathVariable("vehicleId") UUID vehicleId) {
+        User user = userService.getAuthUser();
+
+        Optional<Vehicle> optionalVehicle = service.getVehicleById(vehicleId);
+
+        if (optionalVehicle.isEmpty() || !optionalVehicle.get().hasUserAccess(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Vehicle vehicle = optionalVehicle.get();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + vehicle.getDisplayName() + ".pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(service.toPdf(vehicle));
     }
 
     @GetMapping("/vehicles/{vehicleId}")

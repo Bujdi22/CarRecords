@@ -155,6 +155,12 @@
             <version>11.1.0</version>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>9.11.2</version>
+        </dependency>
     </dependencies>
 
     <build>

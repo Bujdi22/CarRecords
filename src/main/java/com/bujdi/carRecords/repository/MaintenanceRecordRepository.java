@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface MaintenanceRecordRepository extends JpaRepository<MaintenanceRecord, UUID> {
     List<MaintenanceRecord> findByVehicleIdAndDeletedAtIsNull(UUID vehicleId);
     Optional<MaintenanceRecord> findByIdAndDeletedAtIsNull(UUID maintenanceRecordId);
+    int countByVehicleIdAndDeletedAtIsNull(UUID vehicleId);
 }

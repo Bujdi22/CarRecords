@@ -33,6 +33,10 @@ public class MaintenanceRecordService {
         return repo.findByVehicleIdAndDeletedAtIsNull(vehicleId);
     }
 
+    public int getRecordCountForVehicle(UUID vehicleId) {
+        return repo.countByVehicleIdAndDeletedAtIsNull(vehicleId);
+    }
+
     public MaintenanceRecord addRecord(MaintenanceRecordDto dto) {
         LocalDateTime now = LocalDateTime.now();
 

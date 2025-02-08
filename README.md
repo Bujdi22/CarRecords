@@ -7,7 +7,7 @@ Create a `env.properties` file in root, and fill in .env variables
 API_KEY=<api-key-here>
 RECAPTCHA_SECRET=<recaptcha-key>
 
-DB_DATABASE_URL=localhost:5432/spring
+DB_DATABASE_URL=postgres:5432/spring
 DB_USER=root
 DB_PASSWORD=root
 
@@ -15,7 +15,7 @@ S3_BUCKET_NAME=
 S3_ACCESS_KEY=
 S3_SECRET_KEY=
 
-MAIL_HOST=localhost
+MAIL_HOST=mailhog
 MAIL_PORT=1025
 MAIL_USERNAME=
 MAIL_PASSWORD=
@@ -41,4 +41,11 @@ flyway.password=root
 flyway.schemas=public
 
 ; Command: mvn flyway:migrate
+```
+
+## Docker
+
+```
+ mvn clean package -DskipTests
+ docker compose up -d
 ```

@@ -8,7 +8,6 @@ import com.bujdi.carRecords.exception.FileUploadException;
 import com.bujdi.carRecords.model.Media;
 import com.bujdi.carRecords.service.FileService;
 import com.bujdi.carRecords.service.MediaService;
-import com.bujdi.carRecords.validation.annotation.ExistsInDatabase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

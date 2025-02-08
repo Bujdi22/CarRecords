@@ -1,8 +1,10 @@
 package com.bujdi.carRecords.controller;
 
 import com.bujdi.carRecords.dto.VehicleDto;
+import com.bujdi.carRecords.mapping.VehicleResponse;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.model.Vehicle;
+import com.bujdi.carRecords.service.MaintenanceRecordService;
 import com.bujdi.carRecords.service.UserService;
 import com.bujdi.carRecords.service.VehicleService;
 import jakarta.validation.Valid;
@@ -27,11 +29,25 @@ public class VehicleController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/vehicles")
-    public List<Vehicle> getVehicles() {
-        User user = userService.getAuthUser();
+    @Autowired
+    MaintenanceRecordService recordService;
 
-        return service.getVehicles(user);
+    @GetMapping("/vehicles")
+    public List<VehicleResponse> getVehicles() {
+        try {
+            User user = userService.getAuthUser();
+
+            return service.getVehicles(user)
+                    .stream()
+                    .map((vehicle -> {
+                        int count = recordService.getRecordCountForVehicle(vehicle.getId());
+                        return new VehicleResponse(vehicle, count);
+                    }))
+                    .toList();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("/vehicles/export/{vehicleId}")

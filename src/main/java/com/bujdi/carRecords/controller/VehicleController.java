@@ -34,20 +34,15 @@ public class VehicleController {
 
     @GetMapping("/vehicles")
     public List<VehicleResponse> getVehicles() {
-        try {
-            User user = userService.getAuthUser();
+        User user = userService.getAuthUser();
 
-            return service.getVehicles(user)
-                    .stream()
-                    .map((vehicle -> {
-                        int count = recordService.getRecordCountForVehicle(vehicle.getId());
-                        return new VehicleResponse(vehicle, count);
-                    }))
-                    .toList();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-        return null;
+        return service.getVehicles(user)
+                .stream()
+                .map((vehicle -> {
+                    int count = recordService.getRecordCountForVehicle(vehicle.getId());
+                    return new VehicleResponse(vehicle, count);
+                }))
+                .toList();
     }
 
     @GetMapping("/vehicles/export/{vehicleId}")

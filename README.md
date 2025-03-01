@@ -7,6 +7,8 @@ Create a `env.properties` file in root, and fill in .env variables
 API_KEY=<api-key-here>
 RECAPTCHA_SECRET=<recaptcha-key>
 
+DEBUG_ENABLED=true
+
 DB_DATABASE_URL=postgres:5432/spring
 DB_USER=root
 DB_PASSWORD=root
@@ -47,5 +49,10 @@ flyway.schemas=public
 
 ```
  mvn clean package -DskipTests
+ docker comose down
+ docker compose build
  docker compose up -d
+ 
+ 
+ mvn clean package -DskipTests && docker compose down && docker compose build && docker compose up -d 
 ```

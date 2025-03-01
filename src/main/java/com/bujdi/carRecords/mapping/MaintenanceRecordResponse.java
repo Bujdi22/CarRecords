@@ -33,4 +33,15 @@ public class MaintenanceRecordResponse {
         this.vehicleId = record.getVehicle().getId();
         this.odometer = record.getOdometer();
     }
+
+    public MaintenanceRecordResponse(MaintenanceRecord record) {
+        this.id = record.getId();
+        this.title = record.getTitle();
+        this.description = record.getDescription();
+        this.date = record.getDate();
+        this.createdAt = record.getCreatedAt();
+        this.updatedAt = record.getUpdatedAt();
+        this.vehicleId = record.getVehicle().getId();
+        this.odometer = record.getOdometer();
+    }
 }

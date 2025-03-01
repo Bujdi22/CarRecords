@@ -1,6 +1,7 @@
 package com.bujdi.carRecords.service;
 
 import com.bujdi.carRecords.dto.VehicleDto;
+import com.bujdi.carRecords.mapping.VehicleResponse;
 import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.model.Vehicle;
 import com.bujdi.carRecords.repository.VehicleRepository;
@@ -26,6 +27,10 @@ public class VehicleService {
 
     public List<Vehicle> getVehicles(User user) {
         return repo.findByUserIdAndDeletedAtIsNull(user.getId());
+    }
+
+    public long getVehicleCount(User user) {
+        return repo.countByUserIdAndDeletedAtIsNull(user.getId());
     }
 
     public Vehicle addVehicle(Vehicle vehicle, User user) {
@@ -84,5 +89,14 @@ public class VehicleService {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfBytes);
 
         return new InputStreamResource(inputStream);
+    }
+
+    public Optional<Vehicle> getLatestVehicle(User user) {
+        return repo.findLatestByUserIdAndDeletedAtIsNull(user.getId());
+    }
+
+    public VehicleResponse toVehicleResponse(Vehicle vehicle) {
+        int count = maintenanceRecordService.getRecordCountForVehicle(vehicle.getId());
+        return new VehicleResponse(vehicle, count);
     }
 }

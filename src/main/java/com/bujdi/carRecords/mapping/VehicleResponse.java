@@ -1,9 +1,7 @@
 package com.bujdi.carRecords.mapping;
 
 import com.bujdi.carRecords.model.Vehicle;
-import com.bujdi.carRecords.service.MaintenanceRecordService;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

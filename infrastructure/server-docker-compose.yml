@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=replace-me
+      - POSTGRES_USER=replace-me
+      - POSTGRES_DB=spring
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+    driver: bridge

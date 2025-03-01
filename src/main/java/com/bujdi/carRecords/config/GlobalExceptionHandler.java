@@ -1,5 +1,6 @@
 package com.bujdi.carRecords.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +49,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    @Value("${server.debugEnabled}")
+    private boolean debugEnabled;
+
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleUnExpectedException(Exception ex, WebRequest request) {
+        if (debugEnabled) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", ex.getMessage()));
+        }
         return new ResponseEntity<>("Something went wrong", new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

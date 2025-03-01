@@ -29,19 +29,13 @@ public class VehicleController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    MaintenanceRecordService recordService;
-
     @GetMapping("/vehicles")
     public List<VehicleResponse> getVehicles() {
         User user = userService.getAuthUser();
 
         return service.getVehicles(user)
                 .stream()
-                .map((vehicle -> {
-                    int count = recordService.getRecordCountForVehicle(vehicle.getId());
-                    return new VehicleResponse(vehicle, count);
-                }))
+                .map((vehicle -> service.toVehicleResponse(vehicle)))
                 .toList();
     }
 

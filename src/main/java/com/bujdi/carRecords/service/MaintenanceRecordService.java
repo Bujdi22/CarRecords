@@ -4,6 +4,7 @@ import com.bujdi.carRecords.dto.MaintenanceRecordDto;
 import com.bujdi.carRecords.dto.MaintenanceRecordUpdateDto;
 import com.bujdi.carRecords.model.MaintenanceRecord;
 import com.bujdi.carRecords.model.Media;
+import com.bujdi.carRecords.model.User;
 import com.bujdi.carRecords.model.Vehicle;
 import com.bujdi.carRecords.repository.MaintenanceRecordRepository;
 import jakarta.persistence.EntityManager;
@@ -28,9 +29,12 @@ public class MaintenanceRecordService {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     public List<MaintenanceRecord> getRecordsForVehicle(UUID vehicleId) {
         return repo.findByVehicleIdAndDeletedAtIsNull(vehicleId);
+    }
+
+    public long getMaintenanceRecordCount(User user) {
+        return repo.countByUserIdAndDeletedAtIsNull(user.getId());
     }
 
     public int getRecordCountForVehicle(UUID vehicleId) {
@@ -85,5 +89,10 @@ public class MaintenanceRecordService {
     public void deleteRecord(MaintenanceRecord maintenanceRecord) {
         maintenanceRecord.setDeletedAt(LocalDateTime.now());
         repo.save(maintenanceRecord);
+    }
+
+    public Optional<MaintenanceRecord> getLatestRecord(User user)
+    {
+        return repo.findLatestByUserIdAndDeletedAtIsNull(user.getId());
     }
 }

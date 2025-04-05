@@ -195,4 +195,8 @@ public class UserService {
     {
         return groupService.getGroupsOfUser(user);
     }
+
+    public User findByUsername(String username) {
+        return repo.findByUsername(username);
+    }
 }

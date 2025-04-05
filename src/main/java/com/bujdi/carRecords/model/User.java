@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -28,4 +30,11 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+
+    @ManyToMany(mappedBy = "members")
+    private Set<Group> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Group> ownedGroups = new HashSet<>();
 }

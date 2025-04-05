@@ -3,6 +3,7 @@ package com.bujdi.carRecords.service;
 import com.bujdi.carRecords.dto.UpdateAccountDTO;
 import com.bujdi.carRecords.dto.UserDto;
 import com.bujdi.carRecords.exception.AccountNotVerified;
+import com.bujdi.carRecords.model.Group;
 import com.bujdi.carRecords.utils.UrlGenerator;
 import com.bujdi.carRecords.model.SecureToken;
 import com.bujdi.carRecords.model.User;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -37,6 +39,9 @@ public class UserService {
 
     @Autowired
     private SecureTokenRepository tokenRepo;
+
+    @Autowired
+    private GroupService groupService;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -184,5 +189,10 @@ public class UserService {
         }
 
         return repo.save(user);
+    }
+
+    public List<Group> getGroups(User user)
+    {
+        return groupService.getGroupsOfUser(user);
     }
 }

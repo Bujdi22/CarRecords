@@ -1,4 +1,16 @@
 services:
+  springboot_app:
+    build: .
+    container_name: springboot_app
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./env.properties:/app/env.properties  # Mount env.properties into the container
+    networks:
+      - spring-network
   postgres:
     image: postgres:14-alpine
     restart: unless-stopped

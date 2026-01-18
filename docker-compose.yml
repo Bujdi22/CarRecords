@@ -7,6 +7,8 @@ services:
       - postgres
     ports:
       - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
     volumes:
       - ./env.properties:/app/env.properties  # Mount env.properties into the container
     networks:

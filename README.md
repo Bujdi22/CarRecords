@@ -1,5 +1,18 @@
 # Auto Journal Project
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=Spring&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=flat-square&logo=postgresql&logoColor=white)
+
+
+This is the server for the AutoJournal project. 
+Uses Java SpringBoot and PostgreSQL. The front-end is a separate repository (https://github.com/Bujdi22/CarRecordsUI)
+
+## Features
+
+- User accounts: Registraton, e-mail verification, forgot password, etc
+- Authentication using JWT
+- Google SSO
+- Vehicle and maintenance records CRUD
+- Media stored on S3
 
 ## Environment variables
 Create a `env.properties` file in root, and fill in .env variables
@@ -56,3 +69,4 @@ flyway.schemas=public
  
  mvn clean package -DskipTests && docker compose down && docker compose build && docker compose up -d 
 ```
+

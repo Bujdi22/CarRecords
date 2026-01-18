@@ -66,7 +66,10 @@ flyway.schemas=public
  docker compose build
  docker compose up -d
  
- 
+ # one liner to bring up:
  mvn clean package -DskipTests && docker compose down && docker compose build && docker compose up -d 
+ 
+ # First time, run the database migrations
+ mvn flyway:migrate
 ```
 

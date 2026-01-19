@@ -1,0 +1,1 @@
+CREATE SEQUENCE IF NOT EXISTS revinfo_rev_seq;

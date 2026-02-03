@@ -10,6 +10,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +35,16 @@ public class SecurityConfig {
         return http.csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/login", "/api/register", "/api/forgot-password-request", "/api/forgot-password", "/api/health", "/google-redirect-uri", "/api/verify-email").permitAll()
+                .requestMatchers(
+                        "/api/login",
+                        "/api/register",
+                        "/api/forgot-password-request",
+                        "/api/forgot-password",
+                        "/api/health",
+                        "/google-redirect-uri",
+                        "/api/verify-email",
+                        "/robots.txt"
+                ).permitAll()
                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
